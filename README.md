@@ -2,10 +2,13 @@
 
 It currently supports two commands:
 
-`price` - fetch the price of a given crypotcurrency:
+`price` - fetch the price of one or more cryptocurrencies:
 ```
-go run cri price bitcoin
-41862
+MacBook:cri martydill$ go run cri price bitcoin,litecoin,ethereum,tether
+bitcoin: 41263.000000
+litecoin: 71.780000
+ethereum: 2189.820000
+tether: 0.997957
 ```
 
 `chart` - generate a chart of price history for a given cryptocurrency

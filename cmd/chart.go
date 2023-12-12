@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/guptarohit/asciigraph"
 	"github.com/spf13/cobra"
@@ -15,17 +16,24 @@ var chartCmd = &cobra.Command{
 	Args:  cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 
 	Run: func(cmd *cobra.Command, args []string) {
+		symbols := strings.Split(args[0], ",")
 		currency := rootCmd.PersistentFlags().Lookup("currency").Value.String()
-		results := api.GetPriceHistory(args[0], currency, days)
-		var values []float64
-		for i := 0; i < len(results); i++ {
-			v := results[i].Price
-			values = append(values, v)
-		}
+		results := api.GetPriceHistory(symbols, currency, days)
 
-		graph := asciigraph.Plot(values, asciigraph.Precision(0), asciigraph.SeriesColors(
+		var values [][]float64
+
+		for i := 0; i < len(results); i++ {
+			v := results[i]
+			var temp []float64
+			for j := 0; j < len(v); j++ {
+				temp = append(temp, v[j].Price)
+			}
+			values = append(values, temp)
+		}
+		graph := asciigraph.PlotMany(values, asciigraph.Precision(2), asciigraph.SeriesColors(
 			asciigraph.Red,
-		), asciigraph.Height(10), asciigraph.Width(80))
+			asciigraph.Blue,
+		), asciigraph.Height(20), asciigraph.Width(80), asciigraph.LowerBound(0))
 
 		fmt.Println(graph)
 	},
