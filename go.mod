@@ -1,6 +1,6 @@
 module cri
 
-go 1.21.4
+go 1.21
 
 require (
 	github.com/guptarohit/asciigraph v0.5.6
