@@ -20,20 +20,26 @@ var chartCmd = &cobra.Command{
 		currency := rootCmd.PersistentFlags().Lookup("currency").Value.String()
 		results := api.GetPriceHistory(symbols, currency, days)
 
-		var values [][]float64
-
+		var valuesToPlot [][]float64
 		for i := 0; i < len(results); i++ {
-			v := results[i]
+			resultsForCoin := results[i]
 			var temp []float64
-			for j := 0; j < len(v); j++ {
-				temp = append(temp, v[j].Price)
+			for j := 0; j < len(resultsForCoin); j++ {
+				price := resultsForCoin[j].Price
+				temp = append(temp, price)
 			}
-			values = append(values, temp)
+			valuesToPlot = append(valuesToPlot, temp)
 		}
-		graph := asciigraph.PlotMany(values, asciigraph.Precision(2), asciigraph.SeriesColors(
+		graph := asciigraph.PlotMany(valuesToPlot, asciigraph.Precision(2), asciigraph.SeriesColors(
 			asciigraph.Red,
 			asciigraph.Blue,
-		), asciigraph.Height(20), asciigraph.Width(80), asciigraph.LowerBound(0))
+			asciigraph.Green,
+			asciigraph.Yellow,
+			asciigraph.Purple,
+			asciigraph.Orange,
+			asciigraph.Pink,
+			asciigraph.Gray,
+		), asciigraph.Height(20), asciigraph.Width(80), asciigraph.LegendTexts(symbols...))
 
 		fmt.Println(graph)
 	},

@@ -35,7 +35,7 @@ func (api CoinGeckoApi) GetPriceHistory(coins []string, currency string, days in
 		data := responseData.(map[string]interface{})
 		historicalData, ok := data["prices"]
 		if !ok {
-			log.Fatal(data["error"])
+			log.Fatalf("Could not fetch price data: %s\n", data["error"])
 		}
 
 		dayData := historicalData.([]interface{})
